@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@app.post('/')
+@app.post('/') 
 def create(req:schemas.Blog,db:Session=Depends(get_db)):
     new_blog = Blog(title=req.title,body=req.body)
     db.add(new_blog)
