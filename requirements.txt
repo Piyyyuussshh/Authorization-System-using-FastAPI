@@ -1,4 +1,6 @@
-python
+python==3.10.4
 fastapi
 uvicorn
 sqlalchemy
+passlib
+bcrypt
