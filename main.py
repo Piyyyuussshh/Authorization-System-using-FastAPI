@@ -1,9 +1,11 @@
+import email
+from unicodedata import name
 from fastapi import FastAPI,Depends,status,Response
 from database import SessionLocal
 from database import engine 
 import schemas
 import models
-from models import Blog
+from models import Blog,User
 from sqlalchemy.orm import Session
 
 app = FastAPI()
@@ -58,4 +60,10 @@ def update(id, response:Response, req:schemas.Blog, db:Session=Depends(get_db)):
     return {"msg":"data updted"}
 
 
-
+@app.post('/user/')
+def create_user(req:schemas.User, db:Session=Depends(get_db)):
+    user = User(name=req.name,email=req.email,password=req.password)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return {"msg":"Data updated","data":user}
