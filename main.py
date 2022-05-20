@@ -1,4 +1,3 @@
-from ast import mod
 from fastapi import FastAPI,Depends,status,Response
 from database import SessionLocal
 from database import engine 
@@ -24,10 +23,13 @@ def get_db():
     finally:
         db.close()
 
+'''
+This is for Blog
+'''
 
 @app.post('/',status_code=status.HTTP_201_CREATED,tags=["Blogs"]) 
 def create(req:schemas.Blog,db:Session=Depends(get_db)):
-    new_blog = Blog(title=req.title,body=req.body)
+    new_blog = Blog(title=req.title,body=req.body,user_id=1)
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
@@ -38,7 +40,7 @@ def get_blog(db:Session=Depends(get_db)):
     blogs = db.query(models.Blog).all()
     return blogs
 
-@app.get('/blog/{id}',status_code=200,tags=["Blogs"])
+@app.get('/blog/{id}',response_model=schemas.ShowBlog,status_code=200,tags=["Blogs"])
 def show(id, response:Response, db:Session=Depends(get_db)):
     blog = db.query(models.Blog).filter(models.Blog.id==id).first()
     if not blog:
