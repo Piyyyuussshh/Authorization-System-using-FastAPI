@@ -52,5 +52,5 @@ def update(id, response:Response, req:schemas.Blog, db:Session=Depends(database.
     if not blog:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"msg" : "data not found"}
-    return {"msg":"data updted"}
+    return {"msg":"data updated"}
 
